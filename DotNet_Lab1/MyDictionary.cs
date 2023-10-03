@@ -5,13 +5,28 @@ namespace DotNet_Lab1
 {
     public class MyDictionary<TKey, TValue> : IDictionary<TKey, TValue>
     {
+        private class Node
+        {
+            public KeyValuePair<TKey, TValue> Value { get; set; }
+            public Node? Next { get; set; }
+            public Node? Prev { get; set; }
+
+            public Node(KeyValuePair<TKey, TValue> value)
+            {
+                Value = value;
+            }
+        }
+
+        private Node? head;
+        private Node? tail;
+
         public TValue this[TKey key] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public ICollection<TKey> Keys => throw new NotImplementedException();
 
         public ICollection<TValue> Values => throw new NotImplementedException();
 
-        public int Count => throw new NotImplementedException();
+        public int Count { get; private set; }
 
         public bool IsReadOnly => throw new NotImplementedException();
 
