@@ -62,7 +62,12 @@ namespace DotNet_Lab1
 
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
         {
-            throw new NotImplementedException();
+            Node? node = head;
+            while(node is not null)
+            {
+                yield return node.Value;
+                node = node.Next;
+            }
         }
 
         public bool Remove(TKey key)
@@ -82,7 +87,7 @@ namespace DotNet_Lab1
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return GetEnumerator();
         }
     }
 }
