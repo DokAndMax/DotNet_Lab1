@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 namespace DotNet_Lab1
@@ -32,12 +33,22 @@ namespace DotNet_Lab1
 
         public void Add(TKey key, TValue value)
         {
-            throw new NotImplementedException();
+            var keyValuePair = new KeyValuePair<TKey, TValue>(key, value);
+            Add(keyValuePair);
         }
 
         public void Add(KeyValuePair<TKey, TValue> item)
         {
-            throw new NotImplementedException();
+            var node = new Node(item);
+            node.Prev = head;
+
+            if (tail is not null)
+            {
+                tail.Next = node;
+            }
+
+            head ??= node;
+            tail = node;
         }
 
         public void Clear()
