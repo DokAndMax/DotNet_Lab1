@@ -207,6 +207,8 @@ namespace DotNet_Lab1
                 head = nodeToRemove.Prev;
             }
 
+            Count--;
+
             return nodeToRemove;
         }
 
