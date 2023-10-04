@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 namespace DotNet_Lab1
@@ -94,6 +93,36 @@ namespace DotNet_Lab1
         public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TValue value)
         {
             throw new NotImplementedException();
+        }
+
+        private Node? TryGetNode(KeyValuePair<TKey, TValue> item)
+        {
+            Node? node = head;
+            while (node is not null)
+            {
+                if (node.Value.Equals(item))
+                {
+                    return node;
+                }
+                node = node.Next;
+            }
+
+            return null;
+        }
+
+        private Node? TryGetNode(TKey key)
+        {
+            Node? node = head;
+            while (node is not null)
+            {
+                if (node.Value.Key.Equals(key))
+                {
+                    return node;
+                }
+                node = node.Next;
+            }
+
+            return null;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
