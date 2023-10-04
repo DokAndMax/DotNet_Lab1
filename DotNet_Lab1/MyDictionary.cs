@@ -60,29 +60,40 @@ namespace DotNet_Lab1
 
         public void Add(TKey key, TValue value)
         {
-            var keyValuePair = new KeyValuePair<TKey, TValue>(key, value);
-            Add(keyValuePair);
+            Insert(key, value, Count);
         }
 
         public void Add(KeyValuePair<TKey, TValue> item)
         {
-            if (item.Key is null)
-                throw new ArgumentNullException(nameof(item.Key), "The key cannot be null.");
+            Insert(item.Key, item.Value, Count);
+        }
 
-            if (ContainsKey(item.Key))
-                throw new ArgumentException("An item with the same key has already been added", nameof(item.Key));
+        public void Insert(TKey key, TValue value, int index)
+        {
+            if (key is null)
+                throw new ArgumentNullException(nameof(key), "The key cannot be null.");
 
-            var node = new Node(item);
-            node.Prev = head;
+            if (index < 0 || index > Count)
+                throw new ArgumentOutOfRangeException(nameof(index), "The array index is out of the valid range.");
 
-            if (tail is not null)
+            if (ContainsKey(key))
+                throw new ArgumentException("An item with the same key has already been added", nameof(key));
+
+            var keyValuePair = new KeyValuePair<TKey, TValue>(key, value);
+
+            var node = new Node(keyValuePair);
+            if (index == 0)
             {
-                tail.Next = node;
+                InsertAtBeginning(node);
             }
-
-            head ??= node;
-            tail = node;
-
+            else if (index == Count)
+            {
+                InsertAtEnd(node);
+            }
+            else
+            {
+                InsertInMiddle(node, index);
+            }
             Count++;
         }
 
@@ -247,6 +258,51 @@ namespace DotNet_Lab1
             Count--;
 
             return nodeToRemove;
+        }
+
+        private void InsertAtBeginning(Node node)
+        {
+            node.Next = head;
+
+            if (head is not null)
+            {
+                head.Prev = node;
+            }
+
+            head = node;
+            tail ??= node;
+        }
+
+        private void InsertAtEnd(Node node)
+        {
+            node.Prev = tail;
+
+            if (tail is not null)
+            {
+                tail.Next = node;
+            }
+
+            tail = node;
+            head ??= node;
+        }
+
+        private void InsertInMiddle(Node node, int index)
+        {
+            Node current = head!;
+            for (int i = 0; i < index; i++)
+            {
+                current = current.Next!;
+            }
+
+            Node previousNode = current.Prev!;
+            Node nextNode = current;
+
+            previousNode.Next = node;
+
+            nextNode.Prev = node;
+
+            node.Prev = previousNode;
+            node.Next = nextNode;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
