@@ -98,7 +98,23 @@ namespace DotNet_Lab1
 
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
         {
-            throw new NotImplementedException();
+            if (array is null)
+                throw new ArgumentNullException(nameof(array), "The array cannot be null.");
+
+            if (arrayIndex < 0 || arrayIndex >= array.Length)
+                throw new ArgumentOutOfRangeException(nameof(arrayIndex), "The array index is out of the valid range.");
+
+            if (array.Length - arrayIndex < Count)
+                throw new ArgumentException("The destination array has fewer elements than the collection.");
+
+            Node? node = head;
+            int i = arrayIndex;
+
+            while (node is not null)
+            {
+                array[i++] = node.Value;
+                node = node.Next;
+            }
         }
 
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
