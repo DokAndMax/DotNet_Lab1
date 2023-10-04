@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 namespace DotNet_Lab1
@@ -41,7 +42,10 @@ namespace DotNet_Lab1
                 Node? result = TryGetNode(key, false);
                 if (result is not null)
                 {
+                    var oldValue = result.Value;
                     result.Value = new KeyValuePair<TKey, TValue>(key, value);
+
+                    ElementChanged?.Invoke(this, oldValue, result.Value);
                 }
                 else
                 {
@@ -57,6 +61,14 @@ namespace DotNet_Lab1
         public int Count { get; private set; }
 
         public bool IsReadOnly => false;
+
+        public event Action<object>? CollectionCleared;
+        public event Action<object, KeyValuePair<TKey, TValue>[]>? CollectionCopied;
+
+        public event Action<object, KeyValuePair<TKey, TValue>>? ElementAdded;
+
+        public event Action<object, KeyValuePair<TKey, TValue>>? ElementRemoved;
+        public event Action<object, KeyValuePair<TKey, TValue>, KeyValuePair<TKey, TValue>>? ElementChanged;
 
         public void Add(TKey key, TValue value)
         {
@@ -94,7 +106,9 @@ namespace DotNet_Lab1
             {
                 InsertInMiddle(node, index);
             }
+
             Count++;
+            ElementAdded?.Invoke(this, keyValuePair);
         }
 
         public void Clear()
@@ -103,6 +117,7 @@ namespace DotNet_Lab1
             tail = null;
 
             Count = 0;
+            CollectionCleared?.Invoke(this);
         }
 
         public bool Contains(KeyValuePair<TKey, TValue> item)
@@ -141,6 +156,8 @@ namespace DotNet_Lab1
                 array[i++] = node.Value;
                 node = node.Next;
             }
+
+            CollectionCopied?.Invoke(this, array);
         }
 
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
@@ -256,6 +273,7 @@ namespace DotNet_Lab1
             }
 
             Count--;
+            ElementRemoved?.Invoke(this, nodeToRemove.Value);
 
             return nodeToRemove;
         }
