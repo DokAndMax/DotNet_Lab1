@@ -79,12 +79,16 @@ namespace DotNet_Lab1
 
         public bool Contains(KeyValuePair<TKey, TValue> item)
         {
-            throw new NotImplementedException();
+            var node = TryGetNode(item.Key, true, item.Value);
+
+            return node is not null;
         }
 
         public bool ContainsKey(TKey key)
         {
-            throw new NotImplementedException();
+            var node = TryGetNode(key, false);
+
+            return node is not null;
         }
 
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
@@ -133,7 +137,7 @@ namespace DotNet_Lab1
             while (node is not null)
             {
                 if (node.Value.Key.Equals(key) &&
-                    (!isValuePassed || 
+                    (!isValuePassed ||
                     (node.Value.Value?.Equals(value) ?? value is null) ) )
                 {
                     return node;
