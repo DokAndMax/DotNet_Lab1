@@ -113,12 +113,26 @@ namespace DotNet_Lab1
 
         public bool Remove(TKey key)
         {
-            throw new NotImplementedException();
+            var removedNode = TryRemoveNode(key, false);
+
+            if (removedNode is null)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public bool Remove(KeyValuePair<TKey, TValue> item)
         {
-            throw new NotImplementedException();
+            var removedNode = TryRemoveNode(item.Key, true, item.Value);
+
+            if (removedNode is null)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TValue value)
@@ -151,6 +165,39 @@ namespace DotNet_Lab1
             }
 
             return null;
+        }
+
+        private Node? TryRemoveNode(TKey key, bool isValuePassed, TValue? value = default)
+        {
+            var nodeToRemove = TryGetNode(key, isValuePassed, value);
+
+            if (nodeToRemove is null)
+                return null;
+
+            Node? previousNode = nodeToRemove.Prev;
+            Node? nextNode = nodeToRemove.Next;
+
+            if (previousNode is not null)
+            {
+                previousNode.Next = nextNode;
+            }
+
+            if (nextNode is not null)
+            {
+                nextNode.Prev = previousNode;
+            }
+
+            if (nodeToRemove.Equals(head))
+            {
+                head = nodeToRemove.Next;
+            }
+
+            if (nodeToRemove.Equals(tail))
+            {
+                head = nodeToRemove.Prev;
+            }
+
+            return nodeToRemove;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
