@@ -111,6 +111,16 @@ namespace DotNet_Lab1
             }
         }
 
+        public IEnumerable<KeyValuePair<TKey, TValue>> Backwards()
+        {
+            Node? node = tail;
+            while (node is not null)
+            {
+                yield return node.Value;
+                node = node.Prev;
+            }
+        }
+
         public bool Remove(TKey key)
         {
             var removedNode = TryRemoveNode(key, false);
