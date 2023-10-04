@@ -44,9 +44,9 @@ namespace DotNet_Lab1
             }
         }
 
-        public ICollection<TKey> Keys => throw new NotImplementedException();
+        public ICollection<TKey> Keys => this.Select(kvPair => kvPair.Key).ToList();
 
-        public ICollection<TValue> Values => throw new NotImplementedException();
+        public ICollection<TValue> Values => this.Select(kvPair => kvPair.Value).ToList();
 
         public int Count { get; private set; }
 
