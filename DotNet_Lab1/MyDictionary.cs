@@ -25,14 +25,14 @@ namespace DotNet_Lab1
         {
             get
             {
-                Node result = TryGetNode(key) ??
+                Node result = TryGetNode(key, false) ??
                     throw new KeyNotFoundException("The given key was not present in the dictionary");
 
                 return result.Value.Value;
             }
             set
             {
-                Node? result = TryGetNode(key);
+                Node? result = TryGetNode(key, false);
                 if (result is not null)
                 {
                     result.Value = new KeyValuePair<TKey, TValue>(key, value);
@@ -117,27 +117,13 @@ namespace DotNet_Lab1
             throw new NotImplementedException();
         }
 
-        private Node? TryGetNode(KeyValuePair<TKey, TValue> item)
+        private Node? TryGetNode(TKey key, bool isValuePassed, TValue? value = default)
         {
             Node? node = head;
             while (node is not null)
             {
-                if (node.Value.Equals(item))
-                {
-                    return node;
-                }
-                node = node.Next;
-            }
-
-            return null;
-        }
-
-        private Node? TryGetNode(TKey key)
-        {
-            Node? node = head;
-            while (node is not null)
-            {
-                if (node.Value.Key.Equals(key))
+                if (node.Value.Key.Equals(key) &&
+                    (!isValuePassed || node.Value.Value.Equals(value)))
                 {
                     return node;
                 }
