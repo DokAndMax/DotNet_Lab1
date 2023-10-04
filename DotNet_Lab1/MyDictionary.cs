@@ -50,7 +50,7 @@ namespace DotNet_Lab1
 
         public int Count { get; private set; }
 
-        public bool IsReadOnly => throw new NotImplementedException();
+        public bool IsReadOnly => false;
 
         public void Add(TKey key, TValue value)
         {
@@ -70,11 +70,16 @@ namespace DotNet_Lab1
 
             head ??= node;
             tail = node;
+
+            Count++;
         }
 
         public void Clear()
         {
-            throw new NotImplementedException();
+            head = null;
+            tail = null;
+
+            Count = 0;
         }
 
         public bool Contains(KeyValuePair<TKey, TValue> item)
