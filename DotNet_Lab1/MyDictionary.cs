@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace DotNet_Lab1
 {
     public class MyDictionary<TKey, TValue> : IDictionary<TKey, TValue>
+        where TKey : notnull
     {
         private class Node
         {
@@ -20,7 +21,28 @@ namespace DotNet_Lab1
         private Node? head;
         private Node? tail;
 
-        public TValue this[TKey key] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public TValue this[TKey key]
+        {
+            get
+            {
+                Node result = TryGetNode(key) ??
+                    throw new KeyNotFoundException("The given key was not present in the dictionary");
+
+                return result.Value.Value;
+            }
+            set
+            {
+                Node? result = TryGetNode(key);
+                if (result is not null)
+                {
+                    result.Value = new KeyValuePair<TKey, TValue>(key, value);
+                }
+                else
+                {
+                    Add(key, value);
+                }
+            }
+        }
 
         public ICollection<TKey> Keys => throw new NotImplementedException();
 
@@ -73,7 +95,7 @@ namespace DotNet_Lab1
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
         {
             Node? node = head;
-            while(node is not null)
+            while (node is not null)
             {
                 yield return node.Value;
                 node = node.Next;
