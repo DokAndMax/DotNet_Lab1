@@ -114,7 +114,17 @@ namespace DotNet_Lab1
 
         public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TValue value)
         {
-            throw new NotImplementedException();
+            value = default;
+
+            var node = TryGetNode(key, false);
+            bool result = node is not null;
+
+            if (result)
+            {
+                value = node!.Value.Value;
+            }
+
+            return result;
         }
 
         private Node? TryGetNode(TKey key, bool isValuePassed, TValue? value = default)
@@ -123,7 +133,8 @@ namespace DotNet_Lab1
             while (node is not null)
             {
                 if (node.Value.Key.Equals(key) &&
-                    (!isValuePassed || node.Value.Value.Equals(value)))
+                    (!isValuePassed || 
+                    (node.Value.Value?.Equals(value) ?? value is null) ) )
                 {
                     return node;
                 }
