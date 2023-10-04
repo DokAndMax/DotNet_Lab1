@@ -25,6 +25,9 @@ namespace DotNet_Lab1
         {
             get
             {
+                if (key is null)
+                    throw new ArgumentNullException(nameof(key), "The key cannot be null.");
+
                 Node result = TryGetNode(key, false) ??
                     throw new KeyNotFoundException("The given key was not present in the dictionary");
 
@@ -32,6 +35,9 @@ namespace DotNet_Lab1
             }
             set
             {
+                if (key is null)
+                    throw new ArgumentNullException(nameof(key), "The key cannot be null.");
+
                 Node? result = TryGetNode(key, false);
                 if (result is not null)
                 {
@@ -60,6 +66,12 @@ namespace DotNet_Lab1
 
         public void Add(KeyValuePair<TKey, TValue> item)
         {
+            if (item.Key is null)
+                throw new ArgumentNullException(nameof(item.Key), "The key cannot be null.");
+
+            if (ContainsKey(item.Key))
+                throw new ArgumentException("An item with the same key has already been added", nameof(item.Key));
+
             var node = new Node(item);
             node.Prev = head;
 
@@ -91,6 +103,9 @@ namespace DotNet_Lab1
 
         public bool ContainsKey(TKey key)
         {
+            if (key is null)
+                throw new ArgumentNullException(nameof(key), "The key cannot be null.");
+
             var node = TryGetNode(key, false);
 
             return node is not null;
@@ -139,6 +154,9 @@ namespace DotNet_Lab1
 
         public bool Remove(TKey key)
         {
+            if (key is null)
+                throw new ArgumentNullException(nameof(key), "The key cannot be null.");
+
             var removedNode = TryRemoveNode(key, false);
 
             if (removedNode is null)
@@ -163,6 +181,9 @@ namespace DotNet_Lab1
 
         public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TValue value)
         {
+            if (key is null)
+                throw new ArgumentNullException(nameof(key), "The key cannot be null.");
+
             value = default;
 
             var node = TryGetNode(key, false);
