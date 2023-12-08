@@ -41,10 +41,10 @@ bool isContainsKey = myDictionary.ContainsKey("3");
 Console.WriteLine($".ContainsKey(\"3\"): {isContainsKey}\n");
 
 bool isContainsKeyValue = myDictionary.Contains(new KeyValuePair<string, string>("4", "4"));
-Console.WriteLine($".ContainsKey(\"3\"): {isContainsKey}\n");
+Console.WriteLine($".Contains(new KeyValuePair<string, string>(\"4\", \"4\")): {isContainsKeyValue}\n");
 
 myDictionary["1"] = "2";
-PrintAllElements("[\"1\"] = \"2\";", myDictionary);
+PrintAllElements("[\"1\"] = \"2\"", myDictionary);
 
 Console.WriteLine($"[\"4\"]: {myDictionary["4"]}\n");
 
