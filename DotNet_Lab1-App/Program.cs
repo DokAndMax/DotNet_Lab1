@@ -1,4 +1,4 @@
-﻿using DotNet_Lab1;
+﻿using DotNet_Lab1.Core;
 using System.ComponentModel;
 
 
