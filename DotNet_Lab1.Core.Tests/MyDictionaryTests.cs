@@ -227,7 +227,7 @@ namespace DotNet_Lab1.Core.Tests
         }
 
         [TestMethod]
-        public void Contains_NonExistingKey_False()
+        public void Contains_NonExistingElement_False()
         {
             var myDictionary = new MyDictionary<string, int>();
             string key = "key";
@@ -276,7 +276,7 @@ namespace DotNet_Lab1.Core.Tests
         }
         #endregion
 
-        #region Insert
+        #region CopyTo
         [TestMethod]
         public void CopyTo_AtValidIndex_NewElementAtPosition()
         {
@@ -329,6 +329,42 @@ namespace DotNet_Lab1.Core.Tests
             myDictionary.Add($"{key}{tempValue}", tempValue++);
 
             myDictionary.CopyTo(array, 0);
+        }
+        #endregion
+
+        #region Remove
+        [TestMethod]
+        public void Remove_ExistingKey_True()
+        {
+            var myDictionary = new MyDictionary<string, int>();
+            string key = "key";
+            int value = 1;
+            myDictionary.Add(key, value);
+
+            var isRemoved = myDictionary.Remove(key);
+
+            Assert.IsTrue(isRemoved);
+        }
+
+        [TestMethod]
+        public void Remove_NonExistingKey_False()
+        {
+            var myDictionary = new MyDictionary<string, int>();
+            string key = "key";
+
+            var isRemoved = myDictionary.Remove(key);
+
+            Assert.IsFalse(isRemoved);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Remove_NullKey_ShouldThrowArgumentNullException()
+        {
+            var myDictionary = new MyDictionary<string, int>();
+            string? key = null;
+
+            myDictionary.Remove(key);
         }
         #endregion
     }
