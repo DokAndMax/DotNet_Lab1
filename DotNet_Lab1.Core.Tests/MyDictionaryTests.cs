@@ -2,6 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DotNet_Lab1.Core;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json.Linq;
+using System;
 
 namespace DotNet_Lab1.Core.Tests
 {
@@ -190,6 +191,23 @@ namespace DotNet_Lab1.Core.Tests
 
             myDictionary.Add(key, value);
             myDictionary.Insert(key, value, 0);
+        }
+        #endregion
+
+        #region Clear
+        [TestMethod]
+        public void Clear_AllElementsRemoved()
+        {
+            var myDictionary = new MyDictionary<string, int>();
+            string key = "key";
+            int value = 1;
+            myDictionary.Add(key, value);
+
+            myDictionary.Clear();
+
+            int count = myDictionary.Count;
+            Assert.AreEqual(0, count, "Кількість елементів в словнику відрізняється від очікуваної");
+            Assert.ThrowsException<KeyNotFoundException>(() => myDictionary[key]);
         }
         #endregion
     }
