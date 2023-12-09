@@ -239,5 +239,41 @@ namespace DotNet_Lab1.Core.Tests
             Assert.IsFalse(isContains);
         }
         #endregion
+
+        #region ContainsKey
+        [TestMethod]
+        public void ContainsKey_ExistingElement_True()
+        {
+            var myDictionary = new MyDictionary<string, int>();
+            string key = "key";
+            int value = 1;
+            myDictionary.Add(key, value);
+
+            var isContains = myDictionary.ContainsKey(key);
+
+            Assert.IsTrue(isContains);
+        }
+
+        [TestMethod]
+        public void ContainsKey_NonExistingKey_False()
+        {
+            var myDictionary = new MyDictionary<string, int>();
+            string key = "key";
+
+            var isContains = myDictionary.ContainsKey(key);
+
+            Assert.IsFalse(isContains);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ContainsKey_NullKey_ShouldThrowArgumentNullException()
+        {
+            var myDictionary = new MyDictionary<string, int>();
+            string? key = null;
+
+            myDictionary.ContainsKey(key);
+        }
+        #endregion
     }
 }
