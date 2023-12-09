@@ -343,7 +343,11 @@ namespace DotNet_Lab1.Core.Tests
 
             var isRemoved = myDictionary.Remove(key);
 
+            int count = myDictionary.Count;
             Assert.IsTrue(isRemoved);
+            Assert.AreEqual(0, count, "Кількість елементів в словнику відрізняється від очікуваної");
+            Assert.ThrowsException<KeyNotFoundException>(() => myDictionary[key]);
+
         }
 
         [TestMethod]
@@ -354,7 +358,10 @@ namespace DotNet_Lab1.Core.Tests
 
             var isRemoved = myDictionary.Remove(key);
 
+            int count = myDictionary.Count;
             Assert.IsFalse(isRemoved);
+            Assert.AreEqual(0, count, "Кількість елементів в словнику відрізняється від очікуваної");
+            Assert.ThrowsException<KeyNotFoundException>(() => myDictionary[key]);
         }
 
         [TestMethod]
@@ -365,6 +372,39 @@ namespace DotNet_Lab1.Core.Tests
             string? key = null;
 
             myDictionary.Remove(key);
+        }
+
+        [TestMethod]
+        public void Remove_ExistingKVPair_True()
+        {
+            var myDictionary = new MyDictionary<string, int>();
+            string key = "key";
+            int value = 1;
+            KeyValuePair<string, int> kvp = new(key, value);
+            myDictionary.Add(kvp);
+
+            var isRemoved = myDictionary.Remove(kvp);
+
+            int count = myDictionary.Count;
+            Assert.IsTrue(isRemoved);
+            Assert.AreEqual(0, count, "Кількість елементів в словнику відрізняється від очікуваної");
+            Assert.ThrowsException<KeyNotFoundException>(() => myDictionary[key]);
+        }
+
+        [TestMethod]
+        public void Remove_NonExistingKVPair_False()
+        {
+            var myDictionary = new MyDictionary<string, int>();
+            string key = "key";
+            int value = 1;
+            KeyValuePair<string, int> kvp = new(key, value);
+
+            var isRemoved = myDictionary.Remove(kvp);
+
+            int count = myDictionary.Count;
+            Assert.IsFalse(isRemoved);
+            Assert.AreEqual(0, count, "Кількість елементів в словнику відрізняється від очікуваної");
+            Assert.ThrowsException<KeyNotFoundException>(() => myDictionary[key]);
         }
         #endregion
     }
