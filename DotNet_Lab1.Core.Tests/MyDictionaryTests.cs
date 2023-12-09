@@ -275,5 +275,61 @@ namespace DotNet_Lab1.Core.Tests
             myDictionary.ContainsKey(key);
         }
         #endregion
+
+        #region Insert
+        [TestMethod]
+        public void CopyTo_AtValidIndex_NewElementAtPosition()
+        {
+            var myDictionary = new MyDictionary<string, int>();
+
+            string key = "key";
+            int tempValue = 1;
+            var array = new KeyValuePair<string, int>[2];
+
+            myDictionary.Add($"{key}{tempValue}", tempValue++);
+            myDictionary.Add($"{key}{tempValue}", tempValue++);
+
+            myDictionary.CopyTo(array, 0);
+
+            CollectionAssert.AreEqual(myDictionary.ToList(), array);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void CopyTo_NullArray_ShouldThrowArgumentNullException()
+        {
+            var myDictionary = new MyDictionary<string, int>();
+            KeyValuePair<string, int>[]? array = null;
+
+            myDictionary.CopyTo(array, 0);
+        }
+
+        [DataTestMethod]
+        [DataRow(-1)]
+        [DataRow(3)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void CopyTo_ArrayInvalidIndex_ShouldThrowArgumentOutOfRangeException(int invalidIndex)
+        {
+            var myDictionary = new MyDictionary<string, int>();
+            var array = new KeyValuePair<string, int>[2];
+
+            myDictionary.CopyTo(array, invalidIndex);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void CopyTo_InvalidArrayLength_ShouldThrowArgumentException()
+        {
+            var myDictionary = new MyDictionary<string, int>();
+            string key = "key";
+            int tempValue = 1;
+            var array = new KeyValuePair<string, int>[1];
+
+            myDictionary.Add($"{key}{tempValue}", tempValue++);
+            myDictionary.Add($"{key}{tempValue}", tempValue++);
+
+            myDictionary.CopyTo(array, 0);
+        }
+        #endregion
     }
 }
