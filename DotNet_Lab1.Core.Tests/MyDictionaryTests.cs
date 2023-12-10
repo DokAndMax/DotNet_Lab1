@@ -3,6 +3,7 @@ using DotNet_Lab1.Core;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections;
 
 namespace DotNet_Lab1.Core.Tests
 {
@@ -405,6 +406,79 @@ namespace DotNet_Lab1.Core.Tests
             Assert.IsFalse(isRemoved);
             Assert.AreEqual(0, count, "Кількість елементів в словнику відрізняється від очікуваної");
             Assert.ThrowsException<KeyNotFoundException>(() => myDictionary[key]);
+        }
+        #endregion
+
+        #region TryGetValue
+        [TestMethod]
+        public void TryGetValue_ExistingKey_True()
+        {
+            var myDictionary = new MyDictionary<string, int>();
+            string key = "key";
+            int value = 1;
+            myDictionary.Add(key, value);
+
+            var isContains = myDictionary.TryGetValue(key, out int resultValue);
+
+            Assert.IsTrue(isContains);
+            Assert.AreEqual(value, resultValue);
+
+        }
+
+        [TestMethod]
+        public void TryGetValue_NonExistingKey_False()
+        {
+            var myDictionary = new MyDictionary<string, int>();
+            string key = "key";
+
+            var isContains = myDictionary.TryGetValue(key, out int resultValue);
+
+            Assert.IsFalse(isContains);
+            Assert.AreEqual(resultValue, default);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void TryGetValue_NullKey_ShouldThrowArgumentNullException()
+        {
+            var myDictionary = new MyDictionary<string, int>();
+            string? key = null;
+
+            myDictionary.TryGetValue(key, out int _);
+        }
+        #endregion
+
+        #region GetEnumerator
+        [TestMethod]
+        public void GetEnumerator_ExistingKey_True()
+        {
+            KeyValuePair<string, int>[] expectedValues = [new("1", 1), new("2", 2), new("3", 3)];
+            MyDictionary<string, int> myDictionary = [.. expectedValues];
+
+            IEnumerator e1 = expectedValues.GetEnumerator();
+            IEnumerator e2 = myDictionary.GetEnumerator();
+            Assert.AreEqual(expectedValues.Length, myDictionary.Count);
+            while (e2.MoveNext() && e1.MoveNext())
+            {
+                Assert.AreEqual(e1.Current, e2.Current);
+            }
+        }
+        #endregion
+
+        #region Reverse
+        [TestMethod]
+        public void Reverse_ExistingKey_True()
+        {
+            KeyValuePair<string, int>[] expectedValues = [new("1", 1), new("2", 2), new("3", 3)];
+            MyDictionary<string, int> myDictionary = [.. expectedValues];
+
+            IEnumerator e1 = expectedValues.Reverse().GetEnumerator();
+            IEnumerator e2 = myDictionary.Reverse().GetEnumerator();
+            Assert.AreEqual(expectedValues.Length, myDictionary.Count);
+            while (e2.MoveNext() && e1.MoveNext())
+            {
+                Assert.AreEqual(e1.Current, e2.Current);
+            }
         }
         #endregion
     }
