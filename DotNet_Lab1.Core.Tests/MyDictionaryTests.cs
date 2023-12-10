@@ -1,11 +1,11 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using DotNet_Lab1.Core;
+using DotNet_Lab.Core;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 
-namespace DotNet_Lab1.Core.Tests
+namespace DotNet_Lab.Core.Tests
 {
     [TestClass]
     public class MyDictionaryTests
@@ -340,13 +340,15 @@ namespace DotNet_Lab1.Core.Tests
             var myDictionary = new MyDictionary<string, int>();
             string key = "key";
             int value = 1;
+            myDictionary.Add($"{key}Beggining", value);
             myDictionary.Add(key, value);
+            myDictionary.Add($"{key}End", value);
 
             var isRemoved = myDictionary.Remove(key);
 
             int count = myDictionary.Count;
             Assert.IsTrue(isRemoved);
-            Assert.AreEqual(0, count, "Кількість елементів в словнику відрізняється від очікуваної");
+            Assert.AreEqual(2, count, "Кількість елементів в словнику відрізняється від очікуваної");
             Assert.ThrowsException<KeyNotFoundException>(() => myDictionary[key]);
 
         }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace DotNet_Lab1.Core
+namespace DotNet_Lab.Core
 {
     public class MyDictionary<TKey, TValue> : IDictionary<TKey, TValue>
         where TKey : notnull
