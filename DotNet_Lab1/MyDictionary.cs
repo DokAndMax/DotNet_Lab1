@@ -170,7 +170,7 @@ namespace DotNet_Lab1.Core
             }
         }
 
-        public IEnumerable<KeyValuePair<TKey, TValue>> Backwards()
+        public IEnumerable<KeyValuePair<TKey, TValue>> Reverse()
         {
             Node? node = tail;
             while (node is not null)
