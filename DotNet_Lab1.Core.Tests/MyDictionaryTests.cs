@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
+using System.ComponentModel;
+using System.Collections.Generic;
 
 namespace DotNet_Lab.Core.Tests
 {
@@ -481,6 +483,76 @@ namespace DotNet_Lab.Core.Tests
             {
                 Assert.AreEqual(e1.Current, e2.Current);
             }
+        }
+        #endregion
+
+        #region Events
+        [TestMethod]
+        public void Clear_CollectionCleared()
+        {
+            int eventFiriedCount = 0;
+            MyDictionary<string, int> myDictionary = [];
+            myDictionary.CollectionCleared += (_) => eventFiriedCount++;
+
+            myDictionary.Clear();
+
+            Assert.AreEqual(1, eventFiriedCount);
+        }
+
+        [TestMethod]
+        public void CopyTo_CollectionCopied()
+        {
+            string key = "key";
+            int value = 1;
+            int eventFiriedCount = 0;
+            MyDictionary<string, int> myDictionary = [];
+            myDictionary.CollectionCopied += (_, _) => eventFiriedCount++;
+
+            myDictionary.CopyTo([new(key, value)], 0);
+
+            Assert.AreEqual(1, eventFiriedCount);
+        }
+
+        [TestMethod]
+        public void Add_ElementAdded()
+        {
+            string key = "key";
+            int value = 1;
+            int eventFiriedCount = 0;
+            MyDictionary<string, int> myDictionary = [];
+            myDictionary.ElementAdded += (_, _) => eventFiriedCount++;
+
+            myDictionary.Insert(key, value, 0);
+
+            Assert.AreEqual(1, eventFiriedCount);
+        }
+
+        [TestMethod]
+        public void IndexerSetter_ElementChanged()
+        {
+            string key = "key";
+            int value = 1;
+            int eventFiriedCount = 0;
+            MyDictionary<string, int> myDictionary = [new(key, value)];
+            myDictionary.ElementChanged += (_, _, _) => eventFiriedCount++;
+
+            myDictionary[key] = value + 1;
+
+            Assert.AreEqual(1, eventFiriedCount);
+        }
+
+        [TestMethod]
+        public void Remove_ElementRemoved()
+        {
+            string key = "key";
+            int value = 1;
+            int eventFiriedCount = 0;
+            MyDictionary<string, int> myDictionary = [new(key, value)];
+            myDictionary.ElementRemoved += (_, _) => eventFiriedCount++;
+
+            myDictionary.Remove(key);
+
+            Assert.AreEqual(1, eventFiriedCount);
         }
         #endregion
     }
