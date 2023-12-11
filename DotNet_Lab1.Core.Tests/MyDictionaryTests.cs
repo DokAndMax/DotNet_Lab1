@@ -16,7 +16,7 @@ namespace DotNet_Lab.Core.Tests
         [TestMethod]
         public void Add_KeyValue_Count()
         {
-            var myDictionary = new MyDictionary<string, int>();
+            MyDictionary<string, int> myDictionary = [];
             string key = "key";
             int value = 1;
 
@@ -29,7 +29,7 @@ namespace DotNet_Lab.Core.Tests
         [TestMethod]
         public void Add_KeyValuePair()
         {
-            var myDictionary = new MyDictionary<string, int>();
+            MyDictionary<string, int> myDictionary = [];
             string key = "key";
             int value = 1;
             KeyValuePair<string, int> kvp = new(key, value);
@@ -45,13 +45,12 @@ namespace DotNet_Lab.Core.Tests
         [TestMethod]
         public void IndexerGetter_ValidValue_ReturnValidValue()
         {
-            var myDictionary = new MyDictionary<string, int>();
             string key = "key";
             int value = 1;
-
-            myDictionary.Add(key, value);
+            MyDictionary<string, int> myDictionary = [new(key, value)];
 
             int resultValue = myDictionary[key];
+
             Assert.AreEqual(value, resultValue);
         }
 
@@ -59,7 +58,7 @@ namespace DotNet_Lab.Core.Tests
         [ExpectedException(typeof(ArgumentNullException))]
         public void IndexerGetter_NullKey_ShouldThrowArgumentNullException()
         {
-            var myDictionary = new MyDictionary<string, int>();
+            MyDictionary<string, int> myDictionary = [];
             string? key = null;
 
             int resultValue = myDictionary[key];
@@ -69,7 +68,7 @@ namespace DotNet_Lab.Core.Tests
         [ExpectedException(typeof(KeyNotFoundException))]
         public void IndexerGetter_NonExistingKey_ShouldThrowKeyNotFoundException()
         {
-            var myDictionary = new MyDictionary<string, int>();
+            MyDictionary<string, int> myDictionary = [];
             string key = "NonExistingKey";
 
             int resultValue = myDictionary[key];
@@ -81,7 +80,7 @@ namespace DotNet_Lab.Core.Tests
         [ExpectedException(typeof(ArgumentNullException))]
         public void IndexerSetter_NullKey_ShouldThrowArgumentNullException()
         {
-            var myDictionary = new MyDictionary<string, int>();
+            MyDictionary<string, int> myDictionary = [];
             string? key = null;
             int value = 1;
 
@@ -91,7 +90,7 @@ namespace DotNet_Lab.Core.Tests
         [TestMethod]
         public void IndexerSetter_NonExistingKey_AddNewElement()
         {
-            var myDictionary = new MyDictionary<string, int>();
+            MyDictionary<string, int> myDictionary = [];
             string key = "key";
             int value = 1;
 
@@ -106,12 +105,11 @@ namespace DotNet_Lab.Core.Tests
         [TestMethod]
         public void IndexerSetter_ExistingKey_ChangeExistingElement()
         {
-            var myDictionary = new MyDictionary<string, int>();
             string key = "key";
             int value = 1;
             int newValue = 1;
+            MyDictionary<string, int> myDictionary = [new(key, value)];
 
-            myDictionary.Add(key, value);
             myDictionary[key] = newValue;
 
             int resultValue = myDictionary[key];
@@ -128,13 +126,14 @@ namespace DotNet_Lab.Core.Tests
         [DataRow(2)]
         public void Insert_AtValidIndex_NewElementAtPosition(int index)
         {
-            var myDictionary = new MyDictionary<string, int>();
             string key = "key";
-            int tempValue = 1;
-            int value = 5;
-            myDictionary.Add($"{key}{tempValue}", tempValue++);
-            myDictionary.Add($"{key}{tempValue}", tempValue++);
-            myDictionary.Add($"{key}{tempValue}", tempValue++);
+            int value = 1;
+            MyDictionary<string, int> myDictionary = 
+            [
+                new($"{key}1", value + 1),
+                new($"{key}2", value + 2),
+                new($"{key}3", value + 3),
+            ];
 
             myDictionary.Insert(key, value, index);
 
@@ -164,7 +163,7 @@ namespace DotNet_Lab.Core.Tests
         [ExpectedException(typeof(ArgumentNullException))]
         public void Insert_NullKey_ShouldThrowArgumentNullException()
         {
-            var myDictionary = new MyDictionary<string, int>();
+            MyDictionary<string, int> myDictionary = [];
             string? key = null;
             int value = 1;
 
@@ -177,7 +176,7 @@ namespace DotNet_Lab.Core.Tests
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void Insert_AtInvalidIndex_ShouldThrowArgumentOutOfRangeException(int invalidIndex)
         {
-            var myDictionary = new MyDictionary<string, int>();
+            MyDictionary<string, int> myDictionary = [];
             string key = "key";
             int value = 1;
 
@@ -188,11 +187,10 @@ namespace DotNet_Lab.Core.Tests
         [ExpectedException(typeof(ArgumentException))]
         public void Insert_ExistingKey_ShouldThrowArgumentException()
         {
-            var myDictionary = new MyDictionary<string, int>();
             string key = "key";
             int value = 1;
+            MyDictionary<string, int> myDictionary = [new(key, value)];
 
-            myDictionary.Add(key, value);
             myDictionary.Insert(key, value, 0);
         }
         #endregion
@@ -201,10 +199,9 @@ namespace DotNet_Lab.Core.Tests
         [TestMethod]
         public void Clear_AllElementsRemoved()
         {
-            var myDictionary = new MyDictionary<string, int>();
             string key = "key";
             int value = 1;
-            myDictionary.Add(key, value);
+            MyDictionary<string, int> myDictionary = [new(key, value)];
 
             myDictionary.Clear();
 
@@ -218,11 +215,10 @@ namespace DotNet_Lab.Core.Tests
         [TestMethod]
         public void Contains_ExistingElement_True()
         {
-            var myDictionary = new MyDictionary<string, int>();
             string key = "key";
             int value = 1;
             KeyValuePair<string, int> kvp = new(key, value);
-            myDictionary.Add(kvp);
+            MyDictionary<string, int> myDictionary = [kvp];
 
             var isContains = myDictionary.Contains(kvp);
 
@@ -232,10 +228,10 @@ namespace DotNet_Lab.Core.Tests
         [TestMethod]
         public void Contains_NonExistingElement_False()
         {
-            var myDictionary = new MyDictionary<string, int>();
             string key = "key";
             int value = 1;
             KeyValuePair<string, int> kvp = new(key, value);
+            MyDictionary<string, int> myDictionary = [];
 
             var isContains = myDictionary.Contains(kvp);
 
@@ -247,10 +243,9 @@ namespace DotNet_Lab.Core.Tests
         [TestMethod]
         public void ContainsKey_ExistingElement_True()
         {
-            var myDictionary = new MyDictionary<string, int>();
             string key = "key";
             int value = 1;
-            myDictionary.Add(key, value);
+            MyDictionary<string, int> myDictionary = [new(key, value)];
 
             var isContains = myDictionary.ContainsKey(key);
 
@@ -260,7 +255,7 @@ namespace DotNet_Lab.Core.Tests
         [TestMethod]
         public void ContainsKey_NonExistingKey_False()
         {
-            var myDictionary = new MyDictionary<string, int>();
+            MyDictionary<string, int> myDictionary = [];
             string key = "key";
 
             var isContains = myDictionary.ContainsKey(key);
@@ -272,7 +267,7 @@ namespace DotNet_Lab.Core.Tests
         [ExpectedException(typeof(ArgumentNullException))]
         public void ContainsKey_NullKey_ShouldThrowArgumentNullException()
         {
-            var myDictionary = new MyDictionary<string, int>();
+            MyDictionary<string, int> myDictionary = [];
             string? key = null;
 
             myDictionary.ContainsKey(key);
@@ -283,14 +278,14 @@ namespace DotNet_Lab.Core.Tests
         [TestMethod]
         public void CopyTo_AtValidIndex_NewElementAtPosition()
         {
-            var myDictionary = new MyDictionary<string, int>();
-
             string key = "key";
-            int tempValue = 1;
+            int value = 1;
+            MyDictionary<string, int> myDictionary =
+            [
+                new($"{key}1", value),
+                new($"{key}2", value),
+            ];
             var array = new KeyValuePair<string, int>[2];
-
-            myDictionary.Add($"{key}{tempValue}", tempValue++);
-            myDictionary.Add($"{key}{tempValue}", tempValue++);
 
             myDictionary.CopyTo(array, 0);
 
@@ -301,7 +296,7 @@ namespace DotNet_Lab.Core.Tests
         [ExpectedException(typeof(ArgumentNullException))]
         public void CopyTo_NullArray_ShouldThrowArgumentNullException()
         {
-            var myDictionary = new MyDictionary<string, int>();
+            MyDictionary<string, int> myDictionary = [];
             KeyValuePair<string, int>[]? array = null;
 
             myDictionary.CopyTo(array, 0);
@@ -313,7 +308,7 @@ namespace DotNet_Lab.Core.Tests
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void CopyTo_ArrayInvalidIndex_ShouldThrowArgumentOutOfRangeException(int invalidIndex)
         {
-            var myDictionary = new MyDictionary<string, int>();
+            MyDictionary<string, int> myDictionary = [];
             var array = new KeyValuePair<string, int>[2];
 
             myDictionary.CopyTo(array, invalidIndex);
@@ -323,13 +318,14 @@ namespace DotNet_Lab.Core.Tests
         [ExpectedException(typeof(ArgumentException))]
         public void CopyTo_InvalidArrayLength_ShouldThrowArgumentException()
         {
-            var myDictionary = new MyDictionary<string, int>();
             string key = "key";
-            int tempValue = 1;
+            int value = 1;
+            MyDictionary<string, int> myDictionary =
+            [
+                new($"{key}1", value),
+                new($"{key}2", value),
+            ];
             var array = new KeyValuePair<string, int>[1];
-
-            myDictionary.Add($"{key}{tempValue}", tempValue++);
-            myDictionary.Add($"{key}{tempValue}", tempValue++);
 
             myDictionary.CopyTo(array, 0);
         }
@@ -339,12 +335,14 @@ namespace DotNet_Lab.Core.Tests
         [TestMethod]
         public void Remove_ExistingKey_True()
         {
-            var myDictionary = new MyDictionary<string, int>();
             string key = "key";
             int value = 1;
-            myDictionary.Add($"{key}Beggining", value);
-            myDictionary.Add(key, value);
-            myDictionary.Add($"{key}End", value);
+            MyDictionary<string, int> myDictionary = 
+            [
+                new($"{key}Beggining", value), 
+                new(key, value), 
+                new($"{key}End", value)
+            ];
 
             var isRemoved = myDictionary.Remove(key);
 
@@ -358,7 +356,7 @@ namespace DotNet_Lab.Core.Tests
         [TestMethod]
         public void Remove_NonExistingKey_False()
         {
-            var myDictionary = new MyDictionary<string, int>();
+            MyDictionary<string, int> myDictionary = [];
             string key = "key";
 
             var isRemoved = myDictionary.Remove(key);
@@ -373,7 +371,7 @@ namespace DotNet_Lab.Core.Tests
         [ExpectedException(typeof(ArgumentNullException))]
         public void Remove_NullKey_ShouldThrowArgumentNullException()
         {
-            var myDictionary = new MyDictionary<string, int>();
+            MyDictionary<string, int> myDictionary = [];
             string? key = null;
 
             myDictionary.Remove(key);
@@ -382,11 +380,10 @@ namespace DotNet_Lab.Core.Tests
         [TestMethod]
         public void Remove_ExistingKVPair_True()
         {
-            var myDictionary = new MyDictionary<string, int>();
             string key = "key";
             int value = 1;
             KeyValuePair<string, int> kvp = new(key, value);
-            myDictionary.Add(kvp);
+            MyDictionary<string, int> myDictionary = [kvp];
 
             var isRemoved = myDictionary.Remove(kvp);
 
@@ -399,10 +396,10 @@ namespace DotNet_Lab.Core.Tests
         [TestMethod]
         public void Remove_NonExistingKVPair_False()
         {
-            var myDictionary = new MyDictionary<string, int>();
             string key = "key";
             int value = 1;
             KeyValuePair<string, int> kvp = new(key, value);
+            MyDictionary<string, int> myDictionary = [];
 
             var isRemoved = myDictionary.Remove(kvp);
 
@@ -417,10 +414,9 @@ namespace DotNet_Lab.Core.Tests
         [TestMethod]
         public void TryGetValue_ExistingKey_True()
         {
-            var myDictionary = new MyDictionary<string, int>();
             string key = "key";
             int value = 1;
-            myDictionary.Add(key, value);
+            MyDictionary<string, int> myDictionary = [new(key, value)];
 
             var isContains = myDictionary.TryGetValue(key, out int resultValue);
 
@@ -432,7 +428,7 @@ namespace DotNet_Lab.Core.Tests
         [TestMethod]
         public void TryGetValue_NonExistingKey_False()
         {
-            var myDictionary = new MyDictionary<string, int>();
+            MyDictionary<string, int> myDictionary = [];
             string key = "key";
 
             var isContains = myDictionary.TryGetValue(key, out int resultValue);
@@ -445,7 +441,7 @@ namespace DotNet_Lab.Core.Tests
         [ExpectedException(typeof(ArgumentNullException))]
         public void TryGetValue_NullKey_ShouldThrowArgumentNullException()
         {
-            var myDictionary = new MyDictionary<string, int>();
+            MyDictionary<string, int> myDictionary = [];
             string? key = null;
 
             myDictionary.TryGetValue(key, out int _);
